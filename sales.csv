@@ -1,0 +1,9 @@
+Order_ID,Date,Customer_ID,Product,Category,Quantity,Unit_Price,Discount,City,Payment_Method
+ORD001,2026-08-01,CUS001,iPhone 15,Electronics,1,250000,5,Karachi,Credit Card
+ORD002,2026-08-03,CUS002,Nike Air Max,Footwear,2,35000,10,Lahore,Easypaisa
+ORD003,2026-08-05,CUS003,HP Laptop,Electronics,1,180000,8,Islamabad,Bank Transfer
+ORD004,2026-08-07,CUS004,Levi Jeans,Clothing,3,12000,15,Karachi,Cash
+ORD005,2026-08-10,CUS005,Headphones,Electronics,2,8500,0,Rawalpindi,Debit Card
+ORD006,2007-07-03,CUS004,Iphone 18 pro max,Electronics,15,900000.0,3,New York,Debit Card
+ORD007,2003-03-15,CUS005,Pencil,Furniture,7,3.0,0,Karachi,Cash
+ORD008,2006-02-09,CUS005,chair,Furniture,6,11000.0,3,karachi,Bank Transfer
