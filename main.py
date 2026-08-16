@@ -4,33 +4,6 @@
 
 
 
-
-# 1. Add Sale
-# 2. View Sales
-# 3. Search Sale
-# 4. Delete Sale
-# 5. Exit
-
-
-# Enter Order ID:
-# Enter Date:
-# Enter Customer ID:
-
-# Enter Product:
-
-# Enter Category:
-
-# Enter Quantity:
-# Enter Unit Price:
-# Enter Discount:
-# Enter City:
-
-
-# Enter Payment Method:
-
-
-
-
 from datetime import date,datetime
 import csv
 import os 
@@ -41,12 +14,10 @@ class Backbone:
     def __init__(self):
         self.sales_file_name = "sales.csv"
         self.customer_file_name = "customers.csv"
-
         self.order_ID = None
         self.date = None
         self.customer_name = None
         self.customer_ID = None
-
         self.product_name = None
         self.category = None
         self.quantity = None
@@ -56,9 +27,9 @@ class Backbone:
         self.payment_method = None
 
 
-    def load_file(self , filename):
 
-        
+
+    def load_file(self , filename):     
 
         if os.path.exists(filename):
             with open(filename , "r" , newline = "") as file:
@@ -69,8 +40,7 @@ class Backbone:
                     return listing
         else:
             return []
-        
-        
+         
             
     def save_sales(self ,data):
 
@@ -81,10 +51,9 @@ class Backbone:
             if not flag:
                 listing = self.load_file(self.sales_file_name)
                 if len(listing) < 1:
-                    writer.writerow("Order_ID,Date,Customer_ID,Product,Category,Quantity,Unit_Price,Discount,City,Payment_Method")
+                    writer.writerow(["Order_ID","Date","Customer_ID","Product","Category","Quantity","Unit_Price","Discount","City","Payment_Method"])
 
-            else:
-                writer.writerow(data)
+            writer.writerow(data)
 
 
     def save_customer_record(self, record):
@@ -100,30 +69,7 @@ class Backbone:
             else:
                 
                 writer.writerow(record)
-
-
-
-# SAVE CUSTOMER INFO 
-# SAVE SALES IN CORRECT FORM 
-
-
-
     
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
 
     def Add_sale(self):
 
@@ -132,6 +78,7 @@ class Backbone:
         # WHOLE SET UP FOR CUSTOMER ID AND NAME 
         # ------------------------------------------------- 
 
+        new_user_flag  = False
         file = self.load_file(self.customer_file_name)
         while True:      
             user_exist = input("Does Customer already exist(Y/N): ").capitalize()
@@ -165,13 +112,12 @@ class Backbone:
 
 
         elif user_exist == "N":
-            new_user_flag  = False
             file_empty_flag = False 
             file_customer = self.load_file(self.customer_file_name)
 
             if file_customer == []:
-                file_empty_flag = True 
-                return
+                file_empty_flag = True
+                
 
             while True:
                 found_flag = False
@@ -187,17 +133,26 @@ class Backbone:
                     if name == customer_name.replace(" ","").lower():
                         print(f"This username already exist and its customer id is {customer_ID}")
                         found_flag = True
-                        continue              
+                        break              
 
                 if not found_flag:
                     break
                     
             self.customer_name = name
-            length = int(len(file_customer) - 1)
-            self.customer_ID = f"CUS{length + 1:03}"
+            length = len(file_customer)
+            refined_id_number = file_customer[length - 1 ][0]
+            final_id_number = int(refined_id_number.removeprefix("CUS"))
+
+            self.customer_ID = f"CUS{final_id_number + 1:03}"
             new_user_flag  = True
             print(f"{self.customer_name} your customer id is: {self.customer_ID}")
 
+            # self.customer_name = name
+            # length = int(len(file_customer) - 1)
+            # self.customer_ID = f"CUS{file_customer[length][0] + 1:03}"
+            # new_user_flag  = True
+            # print(f"{self.customer_name} your customer id is: {self.customer_ID}")
+            
 
 
 
@@ -241,10 +196,9 @@ class Backbone:
                 break
             except ValueError:
                 print("Invalid Date")
-
         # FINAL TIME VALUE SET 
-
         self.date = final_date.strftime("%Y-%m-%d")
+
 
 
 
@@ -252,9 +206,7 @@ class Backbone:
         # ---------------------------------------------
         # FOR CUSTOMER-ID
         # ---------------------------------------------
-        file3 = self.load_file(self.customer_file_name)
-
-            
+        file3 = self.load_file(self.customer_file_name)          
 
         if file3 != []:
             while True:
@@ -265,7 +217,6 @@ class Backbone:
                     if id == self.customer_ID:
                         id_flag = True
                         break
-
                 else:
                     for line in file3:
                         customer_id = line[0]
@@ -278,8 +229,6 @@ class Backbone:
                     else:
                         print("Enter correct customer id")
                         continue
-
-
         else:
             print("Customer record is empty. Please enter customer details:")
                 
@@ -291,15 +240,13 @@ class Backbone:
         # ---------------------------------------------
         # FOR PRODUCT
         # ---------------------------------------------
-        while True:
-                
+        while True:          
             pro_name = input("Enter the name of your product: ").strip()
 
             if not pro_name.strip():
                 print("Error: Product name cannot be blank.")
                 continue
             break
-
         self.product_name = pro_name
 
 
@@ -345,7 +292,6 @@ class Backbone:
                 break
             except ValueError as ve:
                 print(f"Error: {ve}")
-        
         self.quantity = quan
 
 
@@ -365,7 +311,6 @@ class Backbone:
                 break
             except ValueError as ve:
                 print(f"Error:  Unit price must be any number greater than zero.")
-
         self.unit_price = unit_pri
 
 
@@ -385,7 +330,6 @@ class Backbone:
                 break
             except ValueError as ve:
                 print("Error: Discount must be a number between 0 and 100.")
-
         self.discount = disc
 
 
@@ -405,7 +349,6 @@ class Backbone:
                 print("Error: City name cannot be blank.")
                 continue
             break
-
         self.city_name = city_name
 
 
@@ -449,7 +392,6 @@ class Backbone:
          self.discount,
          self.city_name,
          self.payment_method]
-
         self.save_sales(data)
         
 
@@ -457,13 +399,135 @@ class Backbone:
         # # ---------------------------------------------
         # # SAVING CUSTOMER RECORD
         # # ---------------------------------------------
-        record = [self.customer_ID , self.customer_name]
-        
-        
-        self.save_customer_record(record)
-        
+        if new_user_flag:
+            record = [self.customer_ID , self.customer_name]
+            self.save_customer_record(record)
+
+        print("Sale added successfully!")                       
 
 
+    def View_sales(self):
+
+        data = self.load_file(self.sales_file_name)
+
+        if data == []:
+            print("No sales records found.")
+            return 
+
+        for i in data[1:]:
+            print(f"Order ID: {i[0]} ")
+            print(f"Date: {i[1]}") 
+            print(f"Customer ID: {i[2]}")  
+            print(f"Product: {i[3]}") 
+            print(f"Category: {i[4]}") 
+            print(f"Quantity: {i[5]}")
+            print(f"Unit Price: {i[6]}")
+            print(f"Discount: {i[7]}")
+            print(f"City: {i[8]}") 
+            print(f"Payment Method: {i[9]}")
+            print("\n-----------------------------------\n")
+
+
+    def Search_sales(self):
+
+        ord_id = input("Enter the Order ID you want to find: ")
+
+        data = self.load_file(self.sales_file_name)
+
+        if data == []:
+            print("Order ID not found")
+            return
+
+        for i in data:
+
+            if ord_id == i[0]:
+                print("\n-----------------------------------")
+                print(f"Order ID: {i[0]} ")
+                print(f"Date: {i[1]}") 
+                print(f"Customer ID: {i[2]}")  
+                print(f"Product: {i[3]}") 
+                print(f"Category: {i[4]}") 
+                print(f"Quantity: {i[5]}")
+                print(f"Unit Price: {i[6]}")
+                print(f"Discount: {i[7]}")
+                print(f"City: {i[8]}") 
+                print(f"Payment Method: {i[9]}")
+                print("\n-----------------------------------\n")
+                return 
+
+        print("Order ID not found")
+      
+
+    def delete_sales(self):
+        ord_id = input("Enter the Order ID you want to delete: ")
+        
+        data = self.load_file(self.sales_file_name)
+        new_data = []
+
+        id_found_flag = False
+        if data == []:
+            print("Order ID not found")
+            return
+
+        for i in data:
+
+            if ord_id == i[0]:
+                id_found_flag = True
+            else:
+                new_data.append(i)
+
+
+        if not id_found_flag:
+            print("Order ID not found")
+
+        else:
+            with open(self.sales_file_name , "w" , newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(new_data)
+
+            print("Sale deleted successfully.")
+        
+
+    def Main(self):
+
+
+        while True:
+            try:
+                print("========================================")
+                print("SALES MANAGEMENT SYSTEM")
+                print("========================================\n")
+                print("1. Add Sale")
+                print("2. View Sales")
+                print("3. Search Sale")
+                print("4. Delete Sale")
+                print("5. Exit\n")
+
+                option = int(input("Please select an option (1-5): "))
+
+                if option > 5 or option < 1:
+                    print("Error: Option can be between 1 to 5.")
+            
+                if option == 1:
+                    self.Add_sale()
+
+                elif option == 2:
+                    self.View_sales()
+                   
+                elif option == 3:
+                    self.Search_sales()
+
+                elif option == 4:
+                    self.delete_sales()
+
+                elif option == 5:
+                    break
+                 
+
+            except Exception as e:
+                # print("Error: Option should be in number between 1 to 5.")
+                print(e)
+
+        
 
 
 
@@ -471,5 +535,18 @@ class Backbone:
 if __name__ == "__main__":
 
     bk = Backbone()
-    bk.Add_sale()
-   
+    # bk.Add_sale()
+    bk.Main()
+
+
+
+# 1. Add Sale
+# 2. View Sales
+# 3. Search Sale
+# 4. Delete Sale
+# 5. Exit
+
+
+# TESTING FILE DELETING AND THAN CHECKING CODE FOR FINAL TOUCH UP 
+
+
